@@ -115,6 +115,7 @@ class Knight(Piece):
 
 
 class WhitePawn(Piece):  # Todo consideration! black pawns move in negative y direction.
+    colour = Colour.WHITE
     def move_abilities(self) -> List:
         abilities = []
         abilities.append(MovementAbility(max_units=1, direction=(0, 1)))
@@ -127,6 +128,7 @@ class WhitePawn(Piece):  # Todo consideration! black pawns move in negative y di
 
 
 class BlackPawn(Piece):
+    colour = Colour.BLACK
     def move_abilities(self) -> List:
         abilities = []
         abilities.append(MovementAbility(max_units=1, direction=(0, -1)))
@@ -149,8 +151,8 @@ if __name__ == '__main__':
     a_rook = Rook(colour=Colour.WHITE)
     a_bishop = Bishop(colour=Colour.WHITE)
     a_knight = Knight(colour=Colour.WHITE)
-    a_white_pawn = WhitePawn(colour=Colour.WHITE)
-    a_black_pawn = BlackPawn(colour=Colour.BLACK)
+    a_white_pawn = WhitePawn()
+    a_black_pawn = BlackPawn()
 
     print('The mighty King\'s moves are: ')
     for move in the_mighty_king.move_abilities():
