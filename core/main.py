@@ -47,18 +47,10 @@ def square_colour(rank: Rank, file: File) -> Colour:
 
 
 def create_all_squares() -> List[Square]:
-    # squares = []
-    # for rank in Rank:
-    #     for file in File:
-    #         colour = square_colour(rank, file)
-    #         square = Square(file=file, rank=rank, colour=colour)
-    #         squares.append(square)
-
     squares = [
         Square(file=file, rank=rank, colour=square_colour(rank, file))
         for rank in Rank for file in File
     ]
-
     return squares
 
 
@@ -121,13 +113,17 @@ class Knight(Piece):
         abilities = [MovementAbility(max_units=1, direction=point) for point in point_generator(8, math.pi / 6)]
         return abilities
 
-# class Pawn(Piece):
-#     def move_abilities(self) -> List:
-#         abilities = []
-#         abilities.append(MovementAbility(max_units=1, direction=(0, 1)))
-#         abilities.append(MovementAbility(max_units=2, direction=(0, 1), circumstance="STARTING POSITION"))
-#         abilities.append(MovementAbility(max_units=2, direction=(0, 1), circumstance="STARTING POSITION"))
-#         return abilities
+
+class WhitePawn(Piece):  # Todo consideration! black pawns move in negative y direction.
+    def move_abilities(self) -> List:
+        abilities = []
+        abilities.append(MovementAbility(max_units=1, direction=(0, 1)))
+        abilities.append(MovementAbility(max_units=2, direction=(0, 1), circumstance="STARTING POSITION"))  # Todo does max_units concept work here?
+        abilities.append(MovementAbility(max_units=1, direction=(1, 1), circumstance="PIECE_CAPTURE"))
+        abilities.append(MovementAbility(max_units=1, direction=(-1, 1), circumstance="PIECE_CAPTURE"))
+        abilities.append(MovementAbility(max_units=1, direction=(1, 1), circumstance="EN_PASSANT"))
+        abilities.append(MovementAbility(max_units=1, direction=(-1, 1), circumstance="EN_PASSANT"))
+        return abilities
 
 
 if __name__ == '__main__':
@@ -141,6 +137,7 @@ if __name__ == '__main__':
     a_rook = Rook(colour=Colour.WHITE)
     a_bishop = Bishop(colour=Colour.WHITE)
     a_knight = Knight(colour=Colour.WHITE)
+    a_white_pawn = WhitePawn(colour=Colour.WHITE)
 
     print('The mighty King\'s moves are: ')
     for move in the_mighty_king.move_abilities():
@@ -158,8 +155,12 @@ if __name__ == '__main__':
     for move in a_bishop.move_abilities():
         print(move)
 
-    print('\n A knights\'s moves are: ')
+    print('\n A knight\'s moves are: ')
     for move in a_knight.move_abilities():
+        print(move)
+
+    print('\n A white pawn\'s moves are: ')
+    for move in a_white_pawn.move_abilities():
         print(move)
 
     print('stop here')
