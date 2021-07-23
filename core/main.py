@@ -118,11 +118,23 @@ class WhitePawn(Piece):  # Todo consideration! black pawns move in negative y di
     def move_abilities(self) -> List:
         abilities = []
         abilities.append(MovementAbility(max_units=1, direction=(0, 1)))
-        abilities.append(MovementAbility(max_units=2, direction=(0, 1), circumstance="STARTING POSITION"))  # Todo does max_units concept work here?
+        abilities.append(MovementAbility(max_units=1, direction=(0, 1), circumstance="STARTING POSITION"))  # Todo does max_units concept work here?
         abilities.append(MovementAbility(max_units=1, direction=(1, 1), circumstance="PIECE_CAPTURE"))
         abilities.append(MovementAbility(max_units=1, direction=(-1, 1), circumstance="PIECE_CAPTURE"))
         abilities.append(MovementAbility(max_units=1, direction=(1, 1), circumstance="EN_PASSANT"))
         abilities.append(MovementAbility(max_units=1, direction=(-1, 1), circumstance="EN_PASSANT"))
+        return abilities
+
+
+class BlackPawn(Piece):
+    def move_abilities(self) -> List:
+        abilities = []
+        abilities.append(MovementAbility(max_units=1, direction=(0, -1)))
+        abilities.append(MovementAbility(max_units=1, direction=(0, -1), circumstance="STARTING POSITION"))
+        abilities.append(MovementAbility(max_units=1, direction=(1, -1), circumstance="PIECE_CAPTURE"))
+        abilities.append(MovementAbility(max_units=1, direction=(-1, -1), circumstance="PIECE_CAPTURE"))
+        abilities.append(MovementAbility(max_units=1, direction=(1, -1), circumstance="EN_PASSANT"))
+        abilities.append(MovementAbility(max_units=1, direction=(-1, -1), circumstance="EN_PASSANT"))
         return abilities
 
 
@@ -138,6 +150,7 @@ if __name__ == '__main__':
     a_bishop = Bishop(colour=Colour.WHITE)
     a_knight = Knight(colour=Colour.WHITE)
     a_white_pawn = WhitePawn(colour=Colour.WHITE)
+    a_black_pawn = BlackPawn(colour=Colour.BLACK)
 
     print('The mighty King\'s moves are: ')
     for move in the_mighty_king.move_abilities():
@@ -161,6 +174,10 @@ if __name__ == '__main__':
 
     print('\n A white pawn\'s moves are: ')
     for move in a_white_pawn.move_abilities():
+        print(move)
+
+    print('\n A black pawn\'s moves are: ')
+    for move in a_black_pawn.move_abilities():
         print(move)
 
     print('stop here')
