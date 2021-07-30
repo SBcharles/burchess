@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import pydantic
 from pydantic import BaseModel
 from enum import Enum
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Dict
 import math
 
 from termcolor import colored
@@ -42,19 +42,67 @@ class Square(BaseModel):
     colour: Colour
 
 
+class Board:
+    def __init__(self, opening_pos:bool):
+        self.captured_pieces: List[Piece] = []
+        self.shape = 64
+        self.configuration: Dict[Square, Piece] = {}
+        self.squares: List[Square] = []
+        self.create_all_squares()
+
+        if opening_pos is True:
+            self.set_opening_position()
+
+    def create_all_squares(self) -> List[Square]:  # Todo I want to be able to refer to an individual square, not an index of this list
+        self.squares = [
+            Square(file=file, rank=rank, colour=square_colour(rank, file))
+            for rank in Rank for file in File
+        ]
+        return self.squares
+
+    def set_opening_position(self):
+        _board = {  # Todo here I am recreating the squares?
+            Square(rank=Rank.ONE, file=File.A, colour=Colour.BLACK): Rook(colour=Colour.WHITE),
+            Square(rank=Rank.ONE, file=File.B, colour=Colour.WHITE): Knight(colour=Colour.WHITE),
+            Square(rank=Rank.ONE, file=File.C, colour=Colour.BLACK): Bishop(colour=Colour.WHITE),
+            Square(rank=Rank.ONE, file=File.D, colour=Colour.WHITE): Queen(colour=Colour.WHITE),
+            Square(rank=Rank.ONE, file=File.E, colour=Colour.BLACK): King(colour=Colour.WHITE),
+            Square(rank=Rank.ONE, file=File.F, colour=Colour.WHITE): Bishop(colour=Colour.WHITE),
+            Square(rank=Rank.ONE, file=File.G, colour=Colour.BLACK): Knight(colour=Colour.WHITE),
+            Square(rank=Rank.ONE, file=File.H, colour=Colour.WHITE): Rook(colour=Colour.WHITE),
+            Square(rank=Rank.TWO, file=File.A, colour=Colour.BLACK): WhitePawn,
+            Square(rank=Rank.TWO, file=File.B, colour=Colour.WHITE): WhitePawn,
+            Square(rank=Rank.TWO, file=File.C, colour=Colour.BLACK): WhitePawn,
+            Square(rank=Rank.TWO, file=File.D, colour=Colour.WHITE): WhitePawn,
+            Square(rank=Rank.TWO, file=File.E, colour=Colour.BLACK): WhitePawn,
+            Square(rank=Rank.TWO, file=File.F, colour=Colour.WHITE): WhitePawn,
+            Square(rank=Rank.TWO, file=File.G, colour=Colour.BLACK): WhitePawn,
+            Square(rank=Rank.TWO, file=File.H, colour=Colour.WHITE): WhitePawn,
+            Square(rank=Rank.EIGHT, file=File.A, colour=Colour.BLACK): Rook(colour=Colour.WHITE),
+            Square(rank=Rank.ONE, file=File.B, colour=Colour.WHITE): Knight(colour=Colour.WHITE),
+            Square(rank=Rank.ONE, file=File.C, colour=Colour.BLACK): Bishop(colour=Colour.WHITE),
+            Square(rank=Rank.ONE, file=File.D, colour=Colour.WHITE): Queen(colour=Colour.WHITE),
+            Square(rank=Rank.ONE, file=File.E, colour=Colour.BLACK): King(colour=Colour.WHITE),
+            Square(rank=Rank.ONE, file=File.F, colour=Colour.WHITE): Bishop(colour=Colour.WHITE),
+            Square(rank=Rank.ONE, file=File.G, colour=Colour.BLACK): Knight(colour=Colour.WHITE),
+            Square(rank=Rank.ONE, file=File.H, colour=Colour.WHITE): Rook(colour=Colour.WHITE),
+            Square(rank=Rank.TWO, file=File.A, colour=Colour.BLACK): WhitePawn,
+            Square(rank=Rank.TWO, file=File.B, colour=Colour.WHITE): WhitePawn,
+            Square(rank=Rank.TWO, file=File.C, colour=Colour.BLACK): WhitePawn,
+            Square(rank=Rank.TWO, file=File.D, colour=Colour.WHITE): WhitePawn,
+            Square(rank=Rank.TWO, file=File.E, colour=Colour.BLACK): WhitePawn,
+            Square(rank=Rank.TWO, file=File.F, colour=Colour.WHITE): WhitePawn,
+            Square(rank=Rank.TWO, file=File.G, colour=Colour.BLACK): WhitePawn,
+            Square(rank=Rank.TWO, file=File.H, colour=Colour.WHITE): WhitePawn,
+                  }
+        return self.configuration
+
+
 def square_colour(rank: Rank, file: File) -> Colour:
     file_num = list(File).index(file) + 1
     rank_num = rank.value
     #  chessboard squares are black if rank and file are both odd, or both even.
     return Colour.BLACK if (file_num % 2 == rank_num % 2) else Colour.WHITE
-
-
-def create_all_squares() -> List[Square]:
-    squares = [
-        Square(file=file, rank=rank, colour=square_colour(rank, file))
-        for rank in Rank for file in File
-    ]
-    return squares
 
 
 def display_board1(squares):
@@ -86,6 +134,7 @@ def display_board2(squares):
 
 def initialise_starting_position():
     pass
+
 
 class MovementAbility(BaseModel):
     max_units: int
@@ -177,7 +226,8 @@ if __name__ == '__main__':
     a_one = Square(file=File.A, rank=Rank.ONE, colour=Colour.WHITE)
     a_one_colour = square_colour(a_one.rank, a_one.file)
 
-    squares = create_all_squares()
+    board = Board()
+    squares = board.create_all_squares()
     display_board2(squares)
 
     the_mighty_king = King(colour=Colour.WHITE)
