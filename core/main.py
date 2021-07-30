@@ -5,6 +5,9 @@ from enum import Enum
 from typing import List, Tuple, Optional
 import math
 
+from termcolor import colored
+from colorama import init, Fore, Back, Style
+
 
 class Rank(Enum):
     ONE = 1
@@ -53,6 +56,36 @@ def create_all_squares() -> List[Square]:
     ]
     return squares
 
+
+def display_board1(squares):
+    rank_counter = 56
+    termcolor_dict = {'White': 'on_white', 'Black':'on_red'}
+    for rank in range(9, 1, -1):
+        for file in range(0, 8, 1):
+            square_colour = squares[rank_counter+file].colour.value
+            print(colored(squares[rank_counter+file].file.value, on_color=termcolor_dict[square_colour]), end="")
+            print(colored(squares[rank_counter+file].rank.value, on_color=termcolor_dict[square_colour]), end="   ")
+        print('\n')
+        rank_counter -= 8
+
+
+def display_board2(squares):
+    init(autoreset=True)
+    rank_counter = 56
+    for rank in range(9, 1, -1):
+        for file in range(0, 8, 1):
+            if squares[rank_counter+file].colour.value == 'Black':
+                print(Style.BRIGHT + Back.BLACK + Fore.WHITE+ f'{squares[rank_counter+file].file.value}', end="")
+                print(Style.BRIGHT + Back.BLACK + Fore.WHITE + f'{squares[rank_counter+file].rank.value}', end="   ")
+            else:
+                print(Style.BRIGHT + Back.WHITE + Fore.BLACK + f'{squares[rank_counter+file].file.value}', end="")
+                print(Style.BRIGHT + Back.WHITE + Fore.BLACK + f'{squares[rank_counter+file].rank.value}', end="   ")
+        print('\n')
+        rank_counter -= 8
+
+
+def initialise_starting_position():
+    pass
 
 class MovementAbility(BaseModel):
     max_units: int
@@ -145,6 +178,7 @@ if __name__ == '__main__':
     a_one_colour = square_colour(a_one.rank, a_one.file)
 
     squares = create_all_squares()
+    display_board2(squares)
 
     the_mighty_king = King(colour=Colour.WHITE)
     yas_queen = Queen(colour=Colour.BLACK)
@@ -154,32 +188,32 @@ if __name__ == '__main__':
     a_white_pawn = WhitePawn()
     a_black_pawn = BlackPawn()
 
-    print('The mighty King\'s moves are: ')
-    for move in the_mighty_king.move_abilities():
-        print(move)
-
-    print('\n Yas Queen\'s moves are: ')
-    for move in yas_queen.move_abilities():
-        print(move)
-
-    print('\n A rook\'s moves are: ')
-    for move in a_rook.move_abilities():
-        print(move)
-
-    print('\n A bishop\'s moves are: ')
-    for move in a_bishop.move_abilities():
-        print(move)
-
-    print('\n A knight\'s moves are: ')
-    for move in a_knight.move_abilities():
-        print(move)
-
-    print('\n A white pawn\'s moves are: ')
-    for move in a_white_pawn.move_abilities():
-        print(move)
-
-    print('\n A black pawn\'s moves are: ')
-    for move in a_black_pawn.move_abilities():
-        print(move)
+    # print('The mighty King\'s moves are: ')
+    # for move in the_mighty_king.move_abilities():
+    #     print(move)
+    #
+    # print('\n Yas Queen\'s moves are: ')
+    # for move in yas_queen.move_abilities():
+    #     print(move)
+    #
+    # print('\n A rook\'s moves are: ')
+    # for move in a_rook.move_abilities():
+    #     print(move)
+    #
+    # print('\n A bishop\'s moves are: ')
+    # for move in a_bishop.move_abilities():
+    #     print(move)
+    #
+    # print('\n A knight\'s moves are: ')
+    # for move in a_knight.move_abilities():
+    #     print(move)
+    #
+    # print('\n A white pawn\'s moves are: ')
+    # for move in a_white_pawn.move_abilities():
+    #     print(move)
+    #
+    # print('\n A black pawn\'s moves are: ')
+    # for move in a_black_pawn.move_abilities():
+    #     print(move)
 
     print('stop here')
